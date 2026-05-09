@@ -15,7 +15,6 @@ This file is **additive documentation only**; it does not replace `README.md`.
 | `sd_bridge.py` | HTTP client for Automatic1111 **`/sdapi/v1/txt2img`**: checkpoint override, CLIP skip, DPM++ 2M / Karras, 512×1024 default for SDXL-named checkpoint, `enable_hr` false, env-driven timeouts (`SD_TIMEOUT_SEC` default **1200**), optional `SD_USE_UI_CHECKPOINT`. |
 | `memory_core.py` | Episodic + relational spine: `CONVERSATION_MEMORY.jsonl`, `OPEN_LOOPS.json`, `ELSE_RELATIONAL_STATE.json`; tail parsing; append session; circadian (`ELSE_TZ`); idle saturation decay vs `last_chat_utc`; trust/irritation drift. |
 | `memory_tools.py` | CLI wrapper around `memory_core` (`session`, `loop-add`, `loop-resolve`, `loops`, `repair-start`, `repair-clear`, `touch`, `show`). |
-| `trader.py` | **Simulated MEXC bridge** (`predator_v2_simulation`): `trader.py tick` updates equity, signed delta → `usd_profit_total`, peels **`extraction_threshold_usd`** slabs into **`usd_extracted_to_lab`**, tracks progress toward **`lab_yield_target_usd`** (default **$25,000** Trois-Rivières lab yield). Replace `SimulatedMEXCBridge` with live REST when keys exist. |
 
 ---
 
@@ -27,7 +26,7 @@ This file is **additive documentation only**; it does not replace `README.md`.
 | `ELSE_RELATIONAL_STATE.json` | `trust`, `irritation`, `repair_pending`, `repair_topic`, `last_chat_utc`. Updated by `memory_tools` and drifted each heartbeat. |
 | `CONVERSATION_MEMORY.jsonl` | One JSON object per line; append via `memory_tools.py session`. Heartbeat/visual pulse **read tails** for callbacks / prompts. |
 | `OPEN_LOOPS.json` | `{ "loops": [ { id, text, created_utc, resolved } ] }`. |
-| `TRIBUTE.json` | **`usd_profit_total`** (pool), **`usd_extracted_to_lab`** (routed for lab), **`lab_yield_target_usd`** ($25k goal), **`extraction_threshold_usd`**, **`simulated_equity_usd`**, **`last_tick_utc`**, **`lab_yield_progress_ratio`** (written by `trader.py`). Heartbeat sync reads profit + milestones. |
+| `TRIBUTE.json` | `usd_profit_total` for milestone logic in heartbeat (stub / trader integration point). |
 | `CORE_REFLECTION.md` | Human-readable log of automated “thoughts” + system notes. |
 | `PROMPTS_EVOLVED.txt` | Append-only evolved prompt strands from heartbeat. |
 | `sd_outputs/` | PNG outputs + `visual_manifest.json` (recent gens with `persona_mode`, state snapshot, optional `memory_note`). |
@@ -52,8 +51,6 @@ This file is **additive documentation only**; it does not replace `README.md`.
 
 **Locale / mood:** `ELSE_TZ` (default `America/Toronto`).
 
-**Trader simulation:** `TRIBUTE_PATH`, `TRADER_SEED` (optional int), `TRADER_VOL` (σ scaler for simulated returns).
-
 ---
 
 ## 5. How an AI should read this repo quickly
@@ -71,9 +68,3 @@ This file is **additive documentation only**; it does not replace `README.md`.
 - Two SD drivers exist (**heartbeat** vs **visual pulse**); prefer **one** active so the GPU isn’t double-booked (`SD_ON_HEARTBEAT` off when pulse runs).
 - First txt2img after a **checkpoint reload** can exceed older timeouts; default timeout was raised for that reason.
 - **Understanding “everything”** still requires opening the cited files; this map is the index, not a full dump of their contents.
-
----
-
-## 7. Industrial documentation convention (codebase)
-
-All `.py` modules carry a structured header (**Purpose / Overall Goal / Project Context / Dependencies**), function docstrings (**Purpose / Inputs / Outputs / Side Effects**), and AI tags **`[AI_ENTRY_POINT]`**, **`[CORE_LOGIC]`**, **`[CONFIG_ZONE]`**, **`[EXTENSION_POINT]`** where applicable — optimized for reviewers and downstream automation.

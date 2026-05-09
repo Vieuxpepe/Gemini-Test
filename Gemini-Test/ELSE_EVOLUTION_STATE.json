@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "heartbeat_index": 2,
+  "neural_saturation": 27.84,
+  "mesh_integrity_percent": 92.47,
+  "dominance_bias": 0.383,
+  "ghost_spike_streak": 0,
+  "unlocked_milestone_usd": [],
+  "last_tribute_usd": 0.0,
+  "last_heartbeat_utc": "2026-05-09T04:15:20Z",
+  "notes": "Updated hourly by else_heartbeat.py; tribute synced from TRIBUTE.json"
+}
