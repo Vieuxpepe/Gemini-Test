@@ -1,0 +1,4 @@
+{
+  "usd_profit_total": 0,
+  "note": "Update usd_profit_total when trader.py records realized profit; milestones unlock in ELSE_EVOLUTION_STATE.json"
+}
